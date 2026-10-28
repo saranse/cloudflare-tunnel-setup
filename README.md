@@ -2,6 +2,8 @@
 
 สคริปต์ตั้งค่า Cloudflare Tunnel สำหรับ Windows และ Linux
 
+![แผนภาพการทำงานของ Cloudflare Tunnel](images/cloudflare-tunnel-flow.svg)
+
 ## ความสามารถ
 
 - `setup-tunnel.sh` ใช้ `cloudflared` ที่ติดตั้งอยู่แล้ว หรือดาวน์โหลดไบนารีทางการของ Cloudflare หากยังไม่มี จากนั้นสร้างหรือใช้ Tunnel เดิม ตั้งค่า ingress สำหรับ 2 โดเมน และผูก DNS

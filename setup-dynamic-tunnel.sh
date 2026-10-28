@@ -106,7 +106,7 @@ echo -e "กำลังสร้างไฟล์ $CONFIG_FILE..."
   echo "  - service: http_status:404"
 } > "$tmp_config"
 chmod 600 "$tmp_config"
-cloudflared tunnel ingress validate --config "$tmp_config"
+cloudflared tunnel --config "$tmp_config" ingress validate
 mv -f "$tmp_config" "$CONFIG_FILE"
 trap - EXIT
 

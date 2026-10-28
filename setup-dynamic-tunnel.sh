@@ -30,6 +30,10 @@ if [[ -z "$TUNNEL_ID" ]]; then
   echo -e "${YELLOW}✖ คุณไม่ได้กรอก Tunnel ID สคริปต์หยุดทำงาน${NC}"
   exit 1
 fi
+if ! [[ "$TUNNEL_ID" =~ ^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$ ]]; then
+  echo "Tunnel ID ต้องอยู่ในรูปแบบ UUID เช่น 12345678-1234-1234-1234-123456789abc" >&2
+  exit 1
+fi
 
 # 2. รับจำนวนโดเมนที่ต้องการ
 read -e -p "จำนวนโดเมนที่ต้องการผูก (เช่น 1, 2, 3...): " DOMAIN_COUNT
@@ -38,6 +42,7 @@ if ! [[ "$DOMAIN_COUNT" =~ ^[0-9]+$ ]] || [[ "$DOMAIN_COUNT" -le 0 ]]; then
   echo -e "${YELLOW}✖ กรุณากรอกตัวเลขจำนวนเต็มที่มากกว่า 0${NC}"
   exit 1
 fi
+DOMAIN_COUNT=$((10#$DOMAIN_COUNT))
 if (( DOMAIN_COUNT > 100 )); then
   echo "รองรับได้ไม่เกิน 100 โดเมนต่อการตั้งค่า" >&2
   exit 1

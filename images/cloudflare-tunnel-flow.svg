@@ -1,102 +1,111 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="940" viewBox="0 0 1600 940" role="img" aria-labelledby="title desc">
-  <title id="title">การทำงานของ Cloudflare Tunnel</title>
-  <desc id="desc">ผู้ใช้เชื่อมต่อผ่าน Cloudflare จากนั้น Cloudflare ส่งคำขอผ่าน Tunnel ที่ cloudflared เชื่อมออกไปยังเว็บภายใน และส่งคำตอบย้อนกลับผ่าน Tunnel เดิม</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960" role="img" aria-labelledby="title desc">
+  <title id="title">Cloudflare Tunnel: request flow</title>
+  <desc id="desc">A polished Thai diagram showing a browser request passing through Cloudflare and an outbound Cloudflare Tunnel to an internal origin, then returning through the same tunnel.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4f8ff"/><stop offset="1" stop-color="#eaf1fb"/></linearGradient>
-    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
-    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f97316"/><stop offset="1" stop-color="#ea580c"/></linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#183153" flood-opacity=".12"/></filter>
-    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11Z" fill="#2563eb"/></marker>
-    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11Z" fill="#059669"/></marker>
-    <marker id="arrowPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11Z" fill="#7c3aed"/></marker>
+    <linearGradient id="canvas" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7faff"/><stop offset="1" stop-color="#eef4fb"/></linearGradient>
+    <linearGradient id="cloud" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff1e6"/><stop offset="1" stop-color="#ffdfc6"/></linearGradient>
+    <linearGradient id="tunnel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eee9ff"/><stop offset="1" stop-color="#ddd5ff"/></linearGradient>
+    <linearGradient id="origin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5f8f2"/><stop offset="1" stop-color="#c8f0e2"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="155%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#183153" flood-opacity=".10"/></filter>
+    <marker id="blueArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11Z" fill="#2563eb"/></marker>
+    <marker id="greenArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11Z" fill="#059669"/></marker>
+    <marker id="purpleArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 11 6 1 11Z" fill="#7c3aed"/></marker>
     <style>
-      text{font-family:Inter,"Noto Sans Thai","Tahoma",sans-serif;fill:#14243b}
-      .title{font-size:42px;font-weight:800;letter-spacing:-.4px}
-      .subtitle{font-size:20px;fill:#52657f}
-      .cardTitle{font-size:24px;font-weight:750}
-      .body{font-size:17px;fill:#52657f}
-      .small{font-size:15px;fill:#52657f}
-      .step{font-size:17px;font-weight:700;fill:#fff}
-      .label{font-size:15px;font-weight:700}
-      .bottomHead{font-size:21px;font-weight:800;fill:#fff}
-      .bottomBody{font-size:17px;fill:#d6e3f4}
+      text{font-family:"Sukhumvit Set","Noto Sans Thai","Leelawadee UI",Tahoma,Arial,sans-serif;fill:#172b4d}
+      .eyebrow{font-size:15px;font-weight:800;letter-spacing:2.6px;fill:#54708e}
+      .heading{font-size:43px;font-weight:800;letter-spacing:-.7px}
+      .subtitle{font-size:20px;font-weight:400;fill:#5c7089}
+      .zone{font-size:15px;font-weight:800;letter-spacing:1.7px;fill:#607590}
+      .cardTitle{font-size:25px;font-weight:750}
+      .cardSub{font-size:16px;font-weight:500;fill:#607590}
+      .body{font-size:17px;font-weight:450;fill:#50657e}
+      .mini{font-size:15px;font-weight:600;fill:#526984}
+      .step{font-size:17px;font-weight:800;fill:#fff}
+      .returnLabel{font-size:16px;font-weight:750;fill:#047857}
+      .noteTitle{font-size:19px;font-weight:800;fill:#fff}
+      .noteBody{font-size:16px;font-weight:450;fill:#d5e2f2}
     </style>
   </defs>
-  <rect width="1600" height="940" rx="30" fill="url(#bg)"/>
-  <circle cx="1450" cy="50" r="180" fill="#dceafe" opacity=".45"/>
-  <circle cx="110" cy="850" r="190" fill="#d7f5ee" opacity=".45"/>
 
-  <text x="80" y="90" class="title">Cloudflare Tunnel ทำงานอย่างไร</text>
-  <text x="82" y="129" class="subtitle">เปิดเว็บจากภายนอกได้ โดยให้ cloudflared เชื่อมต่อออกไปหา Cloudflare จากฝั่งเซิร์ฟเวอร์</text>
+  <rect width="1600" height="960" rx="32" fill="url(#canvas)"/>
+  <circle cx="1480" cy="72" r="190" fill="#e0ebff" opacity=".55"/>
+  <circle cx="45" cy="900" r="170" fill="#d8f5ec" opacity=".42"/>
 
-  <!-- Network zones -->
-  <rect x="70" y="178" width="365" height="535" rx="26" fill="#fff" stroke="#d6e1ef" stroke-width="2" filter="url(#shadow)"/>
-  <rect x="470" y="178" width="390" height="535" rx="26" fill="#fff" stroke="#d6e1ef" stroke-width="2" filter="url(#shadow)"/>
-  <rect x="895" y="178" width="635" height="535" rx="26" fill="#f7fbff" stroke="#9fb7d3" stroke-width="2" stroke-dasharray="10 9"/>
-  <rect x="925" y="153" width="575" height="50" rx="18" fill="#dceafe"/>
-  <text x="1212" y="185" text-anchor="middle" class="label" fill="#1d4ed8">เครือข่ายส่วนตัว / Server ภายใน</text>
+  <text x="82" y="65" class="eyebrow">HOW IT WORKS</text>
+  <text x="80" y="119" class="heading">Cloudflare Tunnel</text>
+  <text x="82" y="157" class="subtitle">รับคำขอจากอินเทอร์เน็ต แล้วส่งเข้าเว็บภายในผ่านการเชื่อมต่อที่เซิร์ฟเวอร์เปิดออกไป</text>
 
-  <!-- Client card -->
-  <circle cx="252" cy="293" r="54" fill="#eaf2ff"/>
-  <rect x="226" y="262" width="52" height="39" rx="6" fill="none" stroke="#2563eb" stroke-width="5"/>
-  <path d="M218 311h68l-7 9h-54zM252 301v10" fill="#2563eb"/>
-  <text x="252" y="375" text-anchor="middle" class="cardTitle">ผู้ใช้ / Browser</text>
-  <text x="252" y="410" text-anchor="middle" class="body">เปิด https://app.example.com</text>
-  <rect x="113" y="462" width="278" height="118" rx="18" fill="#f1f6ff"/>
-  <text x="252" y="500" text-anchor="middle" class="label">เชื่อมต่อ HTTPS</text>
-  <text x="252" y="533" text-anchor="middle" class="small">ผู้ใช้ไม่ต้องรู้ IP ภายใน</text>
+  <!-- Zones -->
+  <text x="225" y="226" text-anchor="middle" class="zone">ผู้เข้าชม</text>
+  <text x="625" y="226" text-anchor="middle" class="zone">CLOUDFLARE NETWORK</text>
+  <rect x="865" y="199" width="655" height="505" rx="30" fill="#f7fbff" stroke="#a9bdd4" stroke-width="2" stroke-dasharray="9 9"/>
+  <rect x="1045" y="178" width="300" height="43" rx="14" fill="#dce9f8"/>
+  <text x="1195" y="206" text-anchor="middle" class="zone">เครือข่ายเซิร์ฟเวอร์ของคุณ</text>
 
-  <!-- Cloudflare card -->
-  <circle cx="665" cy="293" r="54" fill="#fff2e8"/>
-  <path d="M628 302c0-12 10-21 22-21 5-17 29-22 41-8 17-4 31 8 31 23 10 2 16 9 16 18h-108c-10 0-17-5-17-12z" fill="none" stroke="#f97316" stroke-width="5" stroke-linejoin="round"/>
-  <text x="665" y="375" text-anchor="middle" class="cardTitle">Cloudflare Edge</text>
-  <text x="665" y="410" text-anchor="middle" class="body">DNS · Proxy · WAF (ถ้าเปิดใช้)</text>
-  <rect x="513" y="462" width="304" height="118" rx="18" fill="#fff7f0"/>
-  <text x="665" y="500" text-anchor="middle" class="label">รับคำขอจากโดเมน</text>
-  <text x="665" y="533" text-anchor="middle" class="small">แล้วส่งเข้า Tunnel ที่เชื่อมอยู่</text>
+  <!-- Cards -->
+  <rect x="75" y="268" width="300" height="330" rx="26" fill="#fff" stroke="#dce6f1" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="475" y="268" width="300" height="330" rx="26" fill="#fff" stroke="#dce6f1" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="900" y="268" width="280" height="330" rx="26" fill="#fff" stroke="#dce6f1" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="1210" y="268" width="280" height="330" rx="26" fill="#fff" stroke="#dce6f1" stroke-width="2" filter="url(#shadow)"/>
 
-  <!-- Tunnel connector and origin -->
-  <rect x="950" y="250" width="264" height="270" rx="22" fill="#fff" stroke="#cbd9ea" stroke-width="2" filter="url(#shadow)"/>
-  <circle cx="1082" cy="310" r="42" fill="#e8f1ff"/>
-  <path d="M1060 312a22 22 0 0 1 42-8m-3-10 5 10-11 2M1104 309a22 22 0 0 1-42 8m3 10-5-10 11-2" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="1082" y="385" text-anchor="middle" class="cardTitle">cloudflared</text>
-  <text x="1082" y="417" text-anchor="middle" class="body">Tunnel Connector</text>
-  <text x="1082" y="456" text-anchor="middle" class="small">อ่าน ingress config แล้วเลือก</text>
-  <text x="1082" y="481" text-anchor="middle" class="small">origin service ปลายทาง</text>
+  <!-- Browser icon -->
+  <circle cx="225" cy="348" r="43" fill="#e9f1ff"/>
+  <rect x="202" y="331" width="46" height="34" rx="5" fill="none" stroke="#2563eb" stroke-width="4"/>
+  <path d="M194 374h62l-7 8h-48zM225 365v9" fill="#2563eb"/>
+  <text x="225" y="438" text-anchor="middle" class="cardTitle">ผู้ใช้ / Browser</text>
+  <text x="225" y="469" text-anchor="middle" class="cardSub">เปิดโดเมนของเว็บไซต์</text>
+  <rect x="108" y="512" width="234" height="52" rx="15" fill="#f0f5ff"/>
+  <text x="225" y="544" text-anchor="middle" class="mini">HTTPS · app.example.com</text>
 
-  <rect x="1250" y="250" width="245" height="270" rx="22" fill="#fff" stroke="#cbd9ea" stroke-width="2" filter="url(#shadow)"/>
-  <circle cx="1372" cy="310" r="42" fill="#e5f8f1"/>
-  <rect x="1350" y="288" width="44" height="42" rx="5" fill="none" stroke="#059669" stroke-width="4"/>
-  <path d="M1350 300h44m-34-6h2m6 0h2m6 0h2m-16 15h22m-22 8h22" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
-  <text x="1372" y="385" text-anchor="middle" class="cardTitle">เว็บ / แอปภายใน</text>
-  <text x="1372" y="417" text-anchor="middle" class="body">Origin service</text>
-  <rect x="1280" y="447" width="185" height="43" rx="12" fill="#ecfdf5"/>
-  <text x="1372" y="474" text-anchor="middle" class="label" fill="#047857">http://127.0.0.1:80</text>
+  <!-- Cloudflare icon -->
+  <circle cx="625" cy="348" r="43" fill="url(#cloud)"/>
+  <path d="M594 357c0-10 8-17 19-17 4-14 24-18 34-7 14-3 25 6 25 19 8 2 13 8 13 15h-91c-8 0-14-4-14-10z" fill="none" stroke="#ea580c" stroke-width="4" stroke-linejoin="round"/>
+  <text x="625" y="438" text-anchor="middle" class="cardTitle">Cloudflare Edge</text>
+  <text x="625" y="469" text-anchor="middle" class="cardSub">DNS · Proxy · WAF</text>
+  <rect x="508" y="512" width="234" height="52" rx="15" fill="#fff5ed"/>
+  <text x="625" y="544" text-anchor="middle" class="mini">หา Tunnel ของ hostname นี้</text>
 
-  <!-- Main request path -->
-  <path d="M390 323h78" fill="none" stroke="#2563eb" stroke-width="6" marker-end="url(#arrowBlue)"/>
-  <circle cx="428" cy="292" r="18" fill="#2563eb"/><text x="428" y="298" text-anchor="middle" class="step">1</text>
-  <path d="M817 323h126" fill="none" stroke="#2563eb" stroke-width="6" marker-end="url(#arrowBlue)"/>
-  <circle cx="876" cy="292" r="18" fill="#2563eb"/><text x="876" y="298" text-anchor="middle" class="step">2</text>
-  <path d="M1215 382h31" fill="none" stroke="#059669" stroke-width="6" marker-end="url(#arrowGreen)"/>
-  <circle cx="1230" cy="348" r="18" fill="#059669"/><text x="1230" y="354" text-anchor="middle" class="step">3</text>
+  <!-- Connector icon -->
+  <circle cx="1040" cy="348" r="43" fill="url(#tunnel)"/>
+  <path d="M1019 350a21 21 0 0 1 39-11m-5-10 8 9-12 2M1061 346a21 21 0 0 1-39 11m5 10-8-9 12-2" fill="none" stroke="#6d4be8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1040" y="438" text-anchor="middle" class="cardTitle">cloudflared</text>
+  <text x="1040" y="469" text-anchor="middle" class="cardSub">Tunnel Connector</text>
+  <rect x="933" y="512" width="214" height="52" rx="15" fill="#f4f1ff"/>
+  <text x="1040" y="544" text-anchor="middle" class="mini">เลือกปลายทางจาก ingress</text>
 
-  <!-- Persistent outbound connection -->
-  <path d="M1010 555 C900 640 780 640 680 555" fill="none" stroke="#7c3aed" stroke-width="4" stroke-dasharray="11 10" marker-end="url(#arrowPurple)"/>
-  <rect x="708" y="600" width="275" height="48" rx="16" fill="#f3e8ff"/>
-  <text x="845" y="630" text-anchor="middle" class="label" fill="#6d28d9">Tunnel เชื่อมออกจากฝั่ง Server</text>
+  <!-- Origin icon -->
+  <circle cx="1350" cy="348" r="43" fill="url(#origin)"/>
+  <rect x="1328" y="327" width="44" height="42" rx="5" fill="none" stroke="#059669" stroke-width="4"/>
+  <path d="M1328 340h44m-32-7h2m7 0h2m7 0h2m-18 16h22m-22 8h22" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
+  <text x="1350" y="438" text-anchor="middle" class="cardTitle">เว็บ / แอปภายใน</text>
+  <text x="1350" y="469" text-anchor="middle" class="cardSub">Origin service</text>
+  <rect x="1238" y="512" width="224" height="52" rx="15" fill="#eaf9f3"/>
+  <text x="1350" y="544" text-anchor="middle" class="mini">http://127.0.0.1:80</text>
 
-  <!-- Return path -->
-  <path d="M1372 535v54h-290v-55" fill="none" stroke="#059669" stroke-width="4" marker-end="url(#arrowGreen)"/>
-  <path d="M950 555 C900 690 790 690 665 555" fill="none" stroke="#7c3aed" stroke-width="4" stroke-dasharray="11 10" marker-end="url(#arrowPurple)"/>
-  <path d="M470 555 C445 675 340 675 252 555" fill="none" stroke="#059669" stroke-width="4" marker-end="url(#arrowGreen)"/>
-  <circle cx="447" cy="621" r="18" fill="#059669"/><text x="447" y="627" text-anchor="middle" class="step">4</text>
+  <!-- Request arrows -->
+  <path d="M375 390h95" fill="none" stroke="#2563eb" stroke-width="6" marker-end="url(#blueArrow)"/>
+  <circle cx="423" cy="356" r="19" fill="#2563eb"/><text x="423" y="362" text-anchor="middle" class="step">1</text>
+  <path d="M775 390h115" fill="none" stroke="#2563eb" stroke-width="6" marker-end="url(#blueArrow)"/>
+  <circle cx="832" cy="356" r="19" fill="#2563eb"/><text x="832" y="362" text-anchor="middle" class="step">2</text>
+  <path d="M1180 390h25" fill="none" stroke="#059669" stroke-width="6" marker-end="url(#greenArrow)"/>
+  <circle cx="1192" cy="356" r="19" fill="#059669"/><text x="1192" y="362" text-anchor="middle" class="step">3</text>
 
-  <!-- Bottom notes -->
-  <rect x="70" y="755" width="1460" height="122" rx="24" fill="#12233d"/>
-  <circle cx="125" cy="815" r="24" fill="#10b981"/>
-  <path d="m114 815 8 8 16-18" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="172" y="803" class="bottomHead">จุดสำคัญ</text>
-  <text x="172" y="840" class="bottomBody">ไม่ต้องเปิด inbound port จากอินเทอร์เน็ตให้ origin; เครื่องที่รัน cloudflared ต้องเชื่อมออกไปยัง Cloudflare ได้</text>
-  <text x="1515" y="912" text-anchor="end" class="small">ลำดับ 1–3 คือคำขอ · ลำดับ 4 คือการตอบกลับ</text>
+  <!-- Outbound tunnel link, separate from request path -->
+  <path d="M1040 268 C965 208 760 208 625 268" fill="none" stroke="#7c3aed" stroke-width="4" stroke-dasharray="10 9" marker-end="url(#purpleArrow)"/>
+  <rect x="730" y="226" width="222" height="34" rx="12" fill="#efeaff"/>
+  <text x="841" y="249" text-anchor="middle" font-size="14" font-weight="750" fill="#6d28d9">Tunnel เชื่อมออกไปหา Cloudflare</text>
+
+  <!-- Response path -->
+  <path d="M1350 598v74H225v-74" fill="none" stroke="#059669" stroke-width="4" marker-end="url(#greenArrow)"/>
+  <circle cx="790" cy="672" r="19" fill="#059669"/><text x="790" y="678" text-anchor="middle" class="step">4</text>
+  <rect x="657" y="691" width="266" height="34" rx="12" fill="#e6f7f1"/>
+  <text x="790" y="714" text-anchor="middle" class="returnLabel">ส่งคำตอบกลับทาง Tunnel เดิม</text>
+
+  <!-- Summary -->
+  <rect x="75" y="774" width="1450" height="112" rx="25" fill="#14243d"/>
+  <circle cx="131" cy="830" r="23" fill="#10b981"/>
+  <path d="m120 830 8 8 15-17" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="176" y="820" class="noteTitle">ไม่ต้องเปิดพอร์ตขาเข้าจากอินเทอร์เน็ต</text>
+  <text x="176" y="852" class="noteBody">เครื่องที่รัน cloudflared ต้องเชื่อมต่อออกไปยัง Cloudflare ได้ ส่วน origin ระบุใน ingress เช่น http://127.0.0.1:80</text>
+  <text x="1520" y="923" text-anchor="end" font-size="14" font-weight="600" fill="#71849d">1–3 คำขอเข้า · 4 ส่งคำตอบกลับ</text>
 </svg>

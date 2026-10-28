@@ -1,13 +1,35 @@
 # Cloudflare Tunnel Setup
 
-Bash scripts สำหรับตั้งค่า Cloudflare Tunnel บน Linux ที่ใช้ `systemd` รองรับ Debian/Ubuntu, Fedora/RHEL, Arch และ distribution อื่นที่ใช้ systemd โดยไม่ผูกกับ package manager ตัวใดตัวหนึ่ง
+สคริปต์ตั้งค่า Cloudflare Tunnel สำหรับ Windows และ Linux
 
 ## ความสามารถ
 
 - `setup-tunnel.sh` ใช้ `cloudflared` ที่ติดตั้งอยู่แล้ว หรือดาวน์โหลดไบนารีทางการของ Cloudflare หากยังไม่มี จากนั้นสร้างหรือใช้ Tunnel เดิม ตั้งค่า ingress สำหรับ 2 โดเมน และผูก DNS
 - `setup-dynamic-tunnel.sh` เขียน ingress config ใหม่ตามจำนวนโดเมน/พอร์ตที่ระบุ สำรอง config เดิม ตรวจ config แล้วจึงนำไปใช้และ restart service
+- `setup-tunnel.ps1` ตั้งค่า Tunnel บน Windows ผ่าน PowerShell, สร้างหรือใช้ Tunnel เดิม, สร้าง ingress config และติดตั้ง/เริ่ม Windows service
 
-## รองรับระบบใดบ้าง
+## Windows
+
+เปิด PowerShell ด้วย **Run as Administrator** แล้วรัน:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/saranse/cloudflare-tunnel-setup/main/setup-tunnel.ps1" -OutFile "$env:TEMP\setup-tunnel.ps1"
+& "$env:TEMP\setup-tunnel.ps1"
+```
+
+สคริปต์ใช้ `cloudflared` ที่พบในเครื่อง หรือใช้ `winget` ติดตั้ง จากนั้นถามชื่อ Tunnel, domain, origin host, port และ HTTPS หรือไม่ ถ้ายังไม่ login จะเปิดขั้นตอนยืนยัน Cloudflare ในเบราว์เซอร์
+
+ไฟล์ config และ credentials สำหรับ service อยู่ที่ `C:\Windows\System32\config\systemprofile\.cloudflared\` และ log อยู่ที่ `C:\Cloudflared\cloudflared.log` ตรวจสถานะได้ด้วย:
+
+```powershell
+Get-Service cloudflared
+Get-Content C:\Cloudflared\cloudflared.log -Tail 100 -Wait
+```
+
+ต้องมี Windows PowerShell/PowerShell, สิทธิ์ Administrator, อินเทอร์เน็ต และ `winget` หาก `cloudflared` ยังไม่ได้ติดตั้ง
+
+## Linux
 
 - Linux ที่บูตด้วย `systemd`
 - CPU architecture: `x86_64`/`amd64`, `x86` 32-bit, `ARM64`/`aarch64` และ `ARMv6/ARMv7` ที่ Cloudflare มีไบนารีให้
@@ -16,7 +38,7 @@ Bash scripts สำหรับตั้งค่า Cloudflare Tunnel บน Li
 
 สคริปต์ไม่ครอบคลุม Linux ที่ไม่มี systemd เช่น Alpine แบบ OpenRC, ระบบ container ที่ไม่มี systemd หรือ CPU architecture ที่ไม่มี cloudflared binary
 
-## ติดตั้งและเริ่มใช้งาน
+### ติดตั้งและเริ่มใช้งาน
 
 ```bash
 git clone https://github.com/saranse/cloudflare-tunnel-setup.git
@@ -40,7 +62,7 @@ sudo dnf install curl
 sudo pacman -S curl
 ```
 
-## เพิ่มหรือแก้รายการโดเมนภายหลัง
+### เพิ่มหรือแก้รายการโดเมนภายหลัง
 
 ```bash
 sudo ./setup-dynamic-tunnel.sh
@@ -50,7 +72,7 @@ sudo ./setup-dynamic-tunnel.sh
 
 > สคริปต์ dynamic แทนที่ ingress config ทั้งไฟล์ด้วยรายการที่กรอก หากมี config เพิ่มเติมที่ต้องเก็บไว้ ให้รวมไว้ในรายการใหม่ก่อนดำเนินการ
 
-## ตรวจสอบสถานะและ log
+### ตรวจสอบสถานะและ log
 
 ```bash
 sudo systemctl status cloudflared --no-pager

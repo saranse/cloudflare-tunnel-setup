@@ -4,6 +4,15 @@
 
 ![แผนภาพการทำงานของ Cloudflare Tunnel](images/cloudflare-tunnel-flow.svg)
 
+### อธิบายภาพ Flow
+
+1. ผู้ใช้เปิดเว็บไซต์ด้วยโดเมน เช่น `https://app.example.com` แล้วเชื่อมต่อแบบ HTTPS ไปยัง Cloudflare
+2. Cloudflare รับคำขอและส่งผ่าน Tunnel ที่เชื่อมต่ออยู่
+3. `cloudflared` บนเครือข่ายของคุณอ่าน `ingress` config แล้วส่งคำขอไปยังเว็บหรือ API ภายในที่ตรงกับ hostname
+4. ระบบภายในส่งคำตอบย้อนกลับผ่าน Tunnel เดิมไปยังผู้ใช้
+
+Tunnel เริ่มจาก `cloudflared` เชื่อมต่อออกไปหา Cloudflare จึงไม่ต้องเปิดพอร์ตขาเข้าจากอินเทอร์เน็ตที่ Server แต่เครื่องที่รัน `cloudflared` ต้องเชื่อมต่อออกไปยัง Cloudflare ได้ ภาพใช้ฟอนต์ [Noto Sans Thai](https://fonts.google.com/noto/specimen/Noto+Sans+Thai)
+
 ## ความสามารถ
 
 - `setup-tunnel.sh` ใช้ `cloudflared` ที่ติดตั้งอยู่แล้ว หรือดาวน์โหลดไบนารีทางการของ Cloudflare หากยังไม่มี จากนั้นสร้างหรือใช้ Tunnel เดิม ตั้งค่า ingress สำหรับ 2 โดเมน และผูก DNS
